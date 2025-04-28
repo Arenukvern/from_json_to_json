@@ -1,0 +1,14 @@
+name: from_json_to_json
+description: A small set utilities to safely convert JSON to values and back
+version: 0.1.0
+homepage: https://github.com/arenukvern/from_json_to_json
+environment:
+  sdk: ">=3.7.0 <4.0.0"
+
+dependencies:
+  collection: ^1.19.0
+  is_dart_empty_or_not: ^0.2.0
+
+dev_dependencies:
+  lints: ^5.1.1
+  xsoulspace_lints: ^0.0.14
