@@ -4,6 +4,7 @@ Add detailed documentation comments to the following classes, focusing on their 
 # from_json_to_json
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Coverage Status](https://coveralls.io/repos/github/Arenukvern/from_json_to_json/badge.svg?branch=main)](https://coveralls.io/github/Arenukvern/from_json_to_json?branch=main)
 [![Pub Version](https://img.shields.io/badge/version-0.1.0-blue)](https://pub.dev/packages/from_json_to_json)
 
 A robust Dart package for safe, predictable, and ergonomic conversion between JSON and Dart core types. Handles edge cases, nulls, and type mismatches gracefully—making your serialization and deserialization code cleaner and more reliable.
@@ -115,6 +116,30 @@ jsonDecodeDurationInSeconds('1.5'); // 1.5 seconds
 jsonDecodeDurationInMicroseconds('1000000'); // 1 second
 jsonDecodeDurationInMinutes('2.5'); // 2 min 30 sec
 ```
+
+## Development
+
+### Code Coverage
+
+To generate and view code coverage:
+
+1. Generate coverage report:
+
+```bash
+make coverage
+```
+
+2. View coverage report in browser (requires `lcov`):
+
+```bash
+make coverage-open
+```
+
+Note: If you don't have `lcov` installed, you can install it with:
+
+- macOS: `brew install lcov`
+- Linux: `sudo apt-get install lcov`
+- Windows: Download from http://ltp.sourceforge.net/coverage/lcov.php
 
 ## Changelog
 
