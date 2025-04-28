@@ -13,8 +13,8 @@ on:
     paths:
       - ".github/workflows/coverage.yaml"
       - "**"
-  schedule:
-    - cron: "0 0 * * 0"
+  # schedule:
+  #   - cron: "0 0 * * 0"
 
 jobs:
   # Check code formatting and static analysis on a single OS (linux)
