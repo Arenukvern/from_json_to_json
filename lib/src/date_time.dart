@@ -44,5 +44,5 @@ DateTime? dateTimeFromIso8601String(final String? value) {
 ///
 /// @ai Use this function to serialize [DateTime] objects for storage or
 /// transmission.
-dynamic dateTimeToIso8601String(final DateTime? value) =>
+String? dateTimeToIso8601String(final DateTime? value) =>
     value?.toIso8601String();

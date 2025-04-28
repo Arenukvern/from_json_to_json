@@ -3,25 +3,23 @@
 /// Returns 0 if the input is null or cannot be converted to a [double].
 ///
 /// ```dart
-/// final result = doubleFromJson('3.14');
-/// print(result); // 3.14
+/// doubleFromJson('3.14'); // 3.14
 /// ```
 ///
 /// @ai Use this method when you need a default value for null inputs.
-double doubleFromJson(final dynamic value) =>
-    doubleNullableFromJson(value) ?? 0;
+double jsonDecodeDouble(final dynamic value) =>
+    jsonDecodeNullableDouble(value) ?? 0;
 
 /// Converts a dynamic value to a nullable [double].
 ///
 /// Returns null if the input is null or cannot be converted to a [double].
 ///
 /// ```dart
-/// final result = doubleNullableFromJson('3.14');
-/// print(result); // 3.14
+/// jsonDecodeNullableDouble('3.14'); // 3.14
 /// ```
 ///
 /// @ai Use this method when you want to allow null values in your numeric data.
-double? doubleNullableFromJson(final dynamic value) {
+double? jsonDecodeNullableDouble(final dynamic value) {
   if (value == null) return null;
   return switch (value) {
     final double value => value,
@@ -34,36 +32,33 @@ double? doubleNullableFromJson(final dynamic value) {
 /// Converts a [double] to a dynamic value for JSON encoding.
 ///
 /// ```dart
-/// final jsonValue = doubleToJson(3.14);
-/// print(jsonValue); // 3.14
+/// jsonEncodeDouble(3.14); // 3.14
 /// ```
 ///
 /// @ai Use this method for encoding [double] values into JSON format.
-dynamic doubleToJson(final double value) => value;
+dynamic jsonEncodeDouble(final double value) => value;
 
 /// Converts a dynamic value to an [int].
 ///
 /// Returns 0 if the input is null or cannot be converted to an [int].
 ///
 /// ```dart
-/// final result = intFromJson('42');
-/// print(result); // 42
+/// jsonDecodeInt('42'); // 42
 /// ```
 ///
 /// @ai Use this method when you need a default value for null inputs.
-int intFromJson(final dynamic value) => intNullableFromJson(value) ?? 0;
+int jsonDecodeInt(final dynamic value) => jsonDecodeNullableInt(value) ?? 0;
 
 /// Converts a dynamic value to a nullable [int].
 ///
 /// Returns null if the input is null or cannot be converted to an [int].
 ///
 /// ```dart
-/// final result = intNullableFromJson('42');
-/// print(result); // 42
+/// jsonDecodeNullableInt('42'); // 42
 /// ```
 ///
 /// @ai Use this method when you want to allow null values in your numeric data.
-int? intNullableFromJson(final dynamic value) => switch (value) {
+int? jsonDecodeNullableInt(final dynamic value) => switch (value) {
   final int value => value,
   final double value => value.toInt(),
   final String value => () {
@@ -86,7 +81,7 @@ int? intNullableFromJson(final dynamic value) => switch (value) {
 /// ```
 ///
 /// @ai Use this method for encoding [int] values into JSON format.
-dynamic intToJson(final int value) => value;
+dynamic jsonEncodeInt(final int value) => value;
 
 /// Extracts the first integer found in a string.
 ///

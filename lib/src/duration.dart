@@ -9,7 +9,7 @@
 /// durationInSecondsFromJson(1); // 0:00:01.000000
 /// durationInSecondsFromJson(null); // 0:00:00.000000
 /// ```
-Duration durationInSecondsFromJson(final dynamic value) {
+Duration jsonDecodeDurationInSeconds(final dynamic value) {
   if (value == null) return Duration.zero;
   Duration handleDouble(final double value) {
     final seconds = value.floorToDouble().toInt();
@@ -44,7 +44,7 @@ Duration durationInSecondsFromJson(final dynamic value) {
 /// durationInMicrosecondsFromJson(1000000); // 0:00:01.000000
 /// durationInMicrosecondsFromJson(null); // 0:00:00.000000
 /// ```
-Duration durationInMicrosecondsFromJson(final dynamic value) {
+Duration jsonDecodeDurationInMicroseconds(final dynamic value) {
   if (value == null) return Duration.zero;
   Duration handleDouble(final double value) {
     final microseconds = value.toInt();
@@ -78,7 +78,7 @@ Duration durationInMicrosecondsFromJson(final dynamic value) {
 /// durationInMinutesFromJson(2); // 0:02:00.000000
 /// durationInMinutesFromJson(null); // 0:00:00.000000
 /// ```
-Duration durationInMinutesFromJson(final dynamic value) {
+Duration jsonDecodeDurationInMinutes(final dynamic value) {
   if (value == null) return Duration.zero;
   Duration handleDouble(final double value) {
     final minutes = value.floor();
@@ -103,11 +103,11 @@ Duration durationInMinutesFromJson(final dynamic value) {
 }
 
 /// Converts a [Duration] to seconds for JSON encoding.
-int durationToSecondsJson(final Duration duration) => duration.inSeconds;
+int jsonEncodeDurationInSeconds(final Duration duration) => duration.inSeconds;
 
 /// Converts a [Duration] to microseconds for JSON encoding.
-int durationToMicrosecondsJson(final Duration duration) =>
+int jsonEncodeDurationInMicroseconds(final Duration duration) =>
     duration.inMicroseconds;
 
 /// Converts a [Duration] to minutes for JSON encoding.
-int durationToMinutesJson(final Duration duration) => duration.inMinutes;
+int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
