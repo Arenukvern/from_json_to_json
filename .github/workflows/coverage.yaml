@@ -84,7 +84,7 @@ jobs:
         name: Install dependencies
         run: dart pub get
       - name: Collect and report coverage
-        run: dart run bin/test_with_coverage.dart --port=9292
+        run: make coverage
       - name: Upload coverage
         uses: coverallsapp/github-action@v2
         with:
