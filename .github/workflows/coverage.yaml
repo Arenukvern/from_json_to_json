@@ -18,7 +18,7 @@ on:
 
 jobs:
   # Check code formatting and static analysis on a single OS (linux)
-  # against Dart dev.
+  # against Dart stable.
   analyze:
     runs-on: ubuntu-latest
     defaults:
@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sdk: [dev]
+        sdk: [stable]
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
@@ -65,8 +65,8 @@ jobs:
       - id: install
         name: Install dependencies
         run: dart pub get
-      - name: Run VM tests
-        run: dart test --platform vm
+      - name: Run tests
+        run: dart test
         if: always() && steps.install.outcome == 'success'
 
   coverage:
