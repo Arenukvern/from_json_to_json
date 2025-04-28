@@ -72,6 +72,7 @@ final b = jsonDecodeBool('true'); // true
 ```dart
 jsonDecodeList('[1,2,3]'); // [1, 2, 3]
 jsonDecodeList(''); // []
+jsonDecodeList('invalid'); // throws FormatException
 verifyListDecodability('[1,2]'); // true
 ```
 
@@ -79,6 +80,8 @@ verifyListDecodability('[1,2]'); // true
 
 ```dart
 jsonDecodeMap('{"a":1}'); // {a: 1}
+jsonDecodeMap(''); // {}
+jsonDecodeMap('invalid'); // throws FormatException
 jsonDecodeNullableMap('{}'); // null
 verifyMapDecodability('{}'); // true
 ```

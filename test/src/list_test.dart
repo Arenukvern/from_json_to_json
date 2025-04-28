@@ -14,7 +14,10 @@ void main() {
       test('handles invalid inputs', () {
         expect(jsonDecodeList(''), []);
         expect(jsonDecodeList('{}'), []); // Object instead of array
-        expect(jsonDecodeList('invalid'), []); // Invalid JSON
+        expect(
+          () => jsonDecodeList('invalid'),
+          throwsFormatException,
+        ); // Invalid JSON
         expect(jsonDecodeList('null'), []); // JSON null
       });
 

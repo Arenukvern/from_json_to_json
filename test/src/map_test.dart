@@ -22,7 +22,7 @@ void main() {
         expect(jsonDecodeNullableMap(''), null);
         expect(jsonDecodeNullableMap('{}'), null);
         expect(jsonDecodeNullableMap('[]'), null);
-        expect(jsonDecodeNullableMap('invalid'), null);
+        expect(() => jsonDecodeNullableMap('invalid'), throwsFormatException);
       });
     });
 
@@ -40,7 +40,7 @@ void main() {
       test('returns empty map for empty or invalid inputs', () {
         expect(jsonDecodeMap(''), {});
         expect(jsonDecodeMap('[]'), {});
-        expect(jsonDecodeMap('invalid'), {});
+        expect(() => jsonDecodeMap('invalid'), throwsFormatException);
       });
     });
 
