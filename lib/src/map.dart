@@ -53,13 +53,16 @@ Map<String, dynamic> jsonDecodeMap(final dynamic json) {
 ///
 /// ```dart
 /// try {
-///   final result = jsonDecodeAsMap<String, int>('{"key": 1}');
+///   final result = jsonDecodeMapAs<String, int>('{"key": 1}');
 ///   print(result); // {key: 1}
 /// } catch (e) {
 ///   print('Error: $e');
 /// }
 /// ```
-Map<K, V> jsonDecodeAsMap<K, V>(final dynamic json) =>
+///
+/// @ai Use when you need a map result regardless of input validity.
+/// Handle errors externally.
+Map<K, V> jsonDecodeMapAs<K, V>(final dynamic json) =>
     jsonDecodeMap(json) as Map<K, V>;
 
 /// Decodes a JSON string into a [Map<String, dynamic>],

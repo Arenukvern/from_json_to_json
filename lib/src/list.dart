@@ -24,6 +24,21 @@ List<dynamic> jsonDecodeList(final dynamic json) {
   };
 }
 
+/// Decodes and casts a JSON string into a [List<T>].
+///
+/// Returns an empty list for invalid or empty input.
+///
+/// ```dart
+/// final result = jsonDecodeListAs<int>('[1, 2, 3]');
+/// print(result); // [1, 2, 3]
+/// ```
+///
+/// May throw errors for invalid types.
+///
+/// @ai Use when you need a list result regardless of input validity.
+List<T> jsonDecodeListAs<T>(final dynamic json) =>
+    jsonDecodeList(json) as List<T>;
+
 /// Checks if a string is potentially decodable as a JSON array.
 ///
 /// ```dart
