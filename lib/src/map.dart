@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'string.dart';
+
 /// Decodes a JSON string into a non-empty [Map<String, dynamic>] or null.
 ///
 /// Returns null if the input is empty or decodes to an empty map.
@@ -14,7 +16,8 @@ import 'dart:convert';
 ///
 /// @ai Use when you need to distinguish between empty and non-empty maps.
 /// Handle errors externally.
-Map<String, dynamic>? jsonDecodeNullableMap(final String jsonString) {
+Map<String, dynamic>? jsonDecodeNullableMap(final dynamic json) {
+  final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return null;
   return switch (jsonDecode(jsonString)) {
     final Map<String, dynamic> map => map.isEmpty ? null : map,
@@ -36,13 +39,28 @@ Map<String, dynamic>? jsonDecodeNullableMap(final String jsonString) {
 ///
 /// @ai Use when you need a map result regardless of input validity.
 /// Handle errors externally.
-Map<String, dynamic> jsonDecodeMap(final String jsonString) {
+Map<String, dynamic> jsonDecodeMap(final dynamic json) {
+  final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return {};
   return switch (jsonDecode(jsonString)) {
     final Map<String, dynamic> map => map,
     _ => {},
   };
 }
+
+/// Decodes a JSON string into a [Map<K, V>],
+/// throwing errors for invalid types.
+///
+/// ```dart
+/// try {
+///   final result = jsonDecodeAsMap<String, int>('{"key": 1}');
+///   print(result); // {key: 1}
+/// } catch (e) {
+///   print('Error: $e');
+/// }
+/// ```
+Map<K, V> jsonDecodeAsMap<K, V>(final dynamic json) =>
+    jsonDecodeMap(json) as Map<K, V>;
 
 /// Decodes a JSON string into a [Map<String, dynamic>],
 ///  throwing errors for invalid input.

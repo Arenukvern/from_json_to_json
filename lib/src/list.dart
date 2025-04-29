@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'string.dart';
+
 /// Decodes a JSON string into a [List<dynamic>], always returning a list.
 ///
 /// Returns an empty list for invalid or empty input.
@@ -13,7 +15,8 @@ import 'dart:convert';
 /// ```
 ///
 /// @ai Use when you need a list result regardless of input validity.
-List<dynamic> jsonDecodeList(final String jsonString) {
+List<dynamic> jsonDecodeList(final dynamic json) {
+  final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return [];
   return switch (jsonDecode(jsonString)) {
     final List list => list,
@@ -29,7 +32,8 @@ List<dynamic> jsonDecodeList(final String jsonString) {
 /// ```
 ///
 /// @ai Use to quickly check if a string might be a valid JSON array.
-bool verifyListDecodability(final String jsonString) {
+bool verifyListDecodability(final dynamic json) {
+  final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return false;
   if (jsonString.startsWith('[') && jsonString.endsWith(']')) return true;
   return false;
