@@ -17,6 +17,7 @@ import 'string.dart';
 /// @ai Use when you need to distinguish between empty and non-empty maps.
 /// Handle errors externally.
 Map<String, dynamic>? jsonDecodeNullableMap(final dynamic json) {
+  if (json case final Map<String, dynamic> map) return map.isEmpty ? null : map;
   final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return null;
   return switch (jsonDecode(jsonString)) {
@@ -40,6 +41,7 @@ Map<String, dynamic>? jsonDecodeNullableMap(final dynamic json) {
 /// @ai Use when you need a map result regardless of input validity.
 /// Handle errors externally.
 Map<String, dynamic> jsonDecodeMap(final dynamic json) {
+  if (json case final Map<String, dynamic> map) return map.isEmpty ? {} : map;
   final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return {};
   return switch (jsonDecode(jsonString)) {
@@ -63,7 +65,7 @@ Map<String, dynamic> jsonDecodeMap(final dynamic json) {
 /// @ai Use when you need a map result regardless of input validity.
 /// Handle errors externally.
 Map<K, V> jsonDecodeMapAs<K, V>(final dynamic json) =>
-    jsonDecodeMap(json) as Map<K, V>;
+    jsonDecodeMap(json).cast<K, V>();
 
 /// Decodes a JSON string into a [Map<String, dynamic>],
 ///  throwing errors for invalid input.
@@ -79,8 +81,11 @@ Map<K, V> jsonDecodeMapAs<K, V>(final dynamic json) =>
 ///
 /// @ai Use only when you need to handle errors explicitly.
 /// PREFER [jsonDecodeMap] or [jsonDecodeNullableMap] for safer parsing.
-Map<String, dynamic> jsonDecodeThrowableMap(final String jsonString) =>
-    jsonDecode(jsonString);
+Map<String, dynamic> jsonDecodeThrowableMap(final dynamic json) {
+  if (json case final Map<String, dynamic> map) return map;
+  final jsonString = jsonDecodeString(json);
+  return jsonDecode(jsonString);
+}
 
 /// Checks if a string is potentially decodable as a JSON object.
 ///
@@ -90,7 +95,8 @@ Map<String, dynamic> jsonDecodeThrowableMap(final String jsonString) =>
 /// ```
 ///
 /// @ai Use to quickly check if a string might be a valid JSON object.
-bool verifyMapDecodability(final String jsonString) {
+bool verifyMapDecodability(final dynamic json) {
+  final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return false;
   if (jsonString.startsWith('{') && jsonString.endsWith('}')) return true;
   return false;

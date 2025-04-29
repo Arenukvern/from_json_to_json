@@ -16,6 +16,7 @@ import 'string.dart';
 ///
 /// @ai Use when you need a list result regardless of input validity.
 List<dynamic> jsonDecodeList(final dynamic json) {
+  if (json case final List list) return list;
   final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return [];
   return switch (jsonDecode(jsonString)) {
@@ -37,7 +38,7 @@ List<dynamic> jsonDecodeList(final dynamic json) {
 ///
 /// @ai Use when you need a list result regardless of input validity.
 List<T> jsonDecodeListAs<T>(final dynamic json) =>
-    jsonDecodeList(json) as List<T>;
+    jsonDecodeList(json).cast<T>();
 
 /// Checks if a string is potentially decodable as a JSON array.
 ///

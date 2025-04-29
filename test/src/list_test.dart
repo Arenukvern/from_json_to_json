@@ -11,6 +11,12 @@ void main() {
         expect(jsonDecodeList('[]'), []);
       });
 
+      test('handles dynamic inputs', () {
+        expect(jsonDecodeList([1, 2, 3]), [1, 2, 3]);
+        expect(jsonDecodeList(['a', 'b', 'c']), ['a', 'b', 'c']);
+        expect(jsonDecodeList(null), []);
+      });
+
       test('handles invalid inputs', () {
         expect(jsonDecodeList(''), []);
         expect(jsonDecodeList('{}'), []); // Object instead of array
@@ -33,11 +39,54 @@ void main() {
       });
     });
 
+    group('jsonDecodeListAs<T>', () {
+      test('decodes typed lists correctly', () {
+        expect(jsonDecodeListAs<int>('[1, 2, 3]'), [1, 2, 3]);
+        expect(jsonDecodeListAs<String>('["a", "b", "c"]'), ['a', 'b', 'c']);
+        expect(jsonDecodeListAs<bool>('[true, false]'), [true, false]);
+        expect(jsonDecodeListAs<dynamic>('[]'), []);
+      });
+
+      test('handles dynamic inputs', () {
+        expect(jsonDecodeListAs<int>([1, 2, 3]), [1, 2, 3]);
+        expect(jsonDecodeListAs<String>(['a', 'b', 'c']), ['a', 'b', 'c']);
+        expect(jsonDecodeListAs<dynamic>(null), []);
+      });
+
+      test('throws on type mismatch', () {
+        expect(
+          () => jsonDecodeListAs<int>('["a", "b", "c"]'),
+          throwsA(isA<TypeError>()),
+        );
+        expect(
+          () => jsonDecodeListAs<String>('[1, 2, 3]'),
+          throwsA(isA<TypeError>()),
+        );
+      });
+
+      test('handles nested typed structures', () {
+        expect(jsonDecodeListAs<List<dynamic>>('[[1, 2], [3, 4]]'), [
+          [1, 2],
+          [3, 4],
+        ]);
+        expect(jsonDecodeListAs<Map<String, dynamic>>('[{"a": 1}, {"b": 2}]'), [
+          {'a': 1},
+          {'b': 2},
+        ]);
+      });
+    });
+
     group('verifyListDecodability', () {
       test('identifies valid JSON array strings', () {
         expect(verifyListDecodability('[]'), true);
         expect(verifyListDecodability('[1,2,3]'), true);
         expect(verifyListDecodability('[ ]'), true);
+      });
+
+      test('handles dynamic inputs', () {
+        expect(verifyListDecodability([]), true);
+        expect(verifyListDecodability([1, 2, 3]), true);
+        expect(verifyListDecodability(null), false);
       });
 
       test('identifies invalid JSON array strings', () {
