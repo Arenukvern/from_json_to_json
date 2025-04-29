@@ -18,6 +18,11 @@ void main() {
         });
       });
 
+      test('handles dynamic inputs', () {
+        expect(jsonDecodeNullableMap({'name': 'John'}), {'name': 'John'});
+        expect(jsonDecodeNullableMap(null), null);
+      });
+
       test('returns null for empty or invalid inputs', () {
         expect(jsonDecodeNullableMap(''), null);
         expect(jsonDecodeNullableMap('{}'), null);
@@ -37,10 +42,65 @@ void main() {
         });
       });
 
+      test('handles dynamic inputs', () {
+        expect(jsonDecodeMap({'name': 'John'}), {'name': 'John'});
+        expect(jsonDecodeMap(null), {});
+      });
+
       test('returns empty map for empty or invalid inputs', () {
         expect(jsonDecodeMap(''), {});
         expect(jsonDecodeMap('[]'), {});
         expect(() => jsonDecodeMap('invalid'), throwsFormatException);
+      });
+    });
+
+    group('jsonDecodeMapAs<K,V>', () {
+      test('decodes typed maps correctly', () {
+        expect(jsonDecodeMapAs<String, int>('{"a": 1, "b": 2}'), {
+          'a': 1,
+          'b': 2,
+        });
+        expect(jsonDecodeMapAs<String, String>('{"x": "1", "y": "2"}'), {
+          'x': '1',
+          'y': '2',
+        });
+        expect(jsonDecodeMapAs<String, bool>('{"t": true, "f": false}'), {
+          't': true,
+          'f': false,
+        });
+      });
+
+      test('handles dynamic inputs', () {
+        expect(jsonDecodeMapAs<String, int>({'a': 1, 'b': 2}), {
+          'a': 1,
+          'b': 2,
+        });
+        expect(jsonDecodeMapAs<String, dynamic>(null), {});
+      });
+
+      test('throws on type mismatch', () {
+        expect(
+          () => jsonDecodeMapAs<String, int>('{"a": "1", "b": "2"}'),
+          throwsA(isA<TypeError>()),
+        );
+        expect(
+          () => jsonDecodeMapAs<int, String>('{"1": "a"}'),
+          throwsA(isA<TypeError>()),
+        );
+      });
+
+      test('throws on nested typed structures', () {
+        expect(
+          () => jsonDecodeMapAs<String, Map<String, int>>(
+            '{"x": {"a": 1}, "y": {"b": 2}}',
+          ),
+          throwsA(isA<TypeError>()),
+        );
+        expect(
+          () =>
+              jsonDecodeMapAs<String, List<int>>('{"x": [1, 2], "y": [3, 4]}'),
+          throwsA(isA<TypeError>()),
+        );
       });
     });
 
@@ -53,6 +113,11 @@ void main() {
             'address': {'city': 'New York'},
           },
         });
+      });
+
+      test('handles dynamic inputs', () {
+        expect(jsonDecodeThrowableMap({'name': 'John'}), {'name': 'John'});
+        expect(() => jsonDecodeThrowableMap(null), throwsFormatException);
       });
 
       test('throws FormatException for invalid JSON', () {
@@ -74,6 +139,12 @@ void main() {
         expect(verifyMapDecodability('{}'), true);
         expect(verifyMapDecodability('{"key": "value"}'), true);
         expect(verifyMapDecodability('{ }'), true);
+      });
+
+      test('handles dynamic inputs', () {
+        expect(verifyMapDecodability({}), true);
+        expect(verifyMapDecodability({'key': 'value'}), true);
+        expect(verifyMapDecodability(null), false);
       });
 
       test('identifies invalid JSON object strings', () {
