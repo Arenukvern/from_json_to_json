@@ -5,13 +5,13 @@ Add detailed documentation comments to the following classes, focusing on their 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Coverage Status](https://coveralls.io/repos/github/Arenukvern/from_json_to_json/badge.svg?branch=main)](https://coveralls.io/github/Arenukvern/from_json_to_json?branch=main)
-[![Pub Version](https://img.shields.io/badge/version-0.1.0-blue)](https://pub.dev/packages/from_json_to_json)
+[![Pub Version](https://img.shields.io/badge/version-0.2.0-blue)](https://pub.dev/packages/from_json_to_json)
 
 A robust Dart package for safe, predictable, and ergonomic conversion between JSON and Dart core types. Handles edge cases, nulls, and type mismatches gracefully—making your serialization and deserialization code cleaner and more reliable.
 
 ## Features
 
-- **Type-safe decoding**: Convert dynamic JSON values to Dart types (`String`, `int`, `double`, `bool`, `List`, `Map`, `DateTime`, `Duration`) with sensible defaults.
+- **Type-safe decoding**: Convert dynamic JSON values to Dart types (`String`, `int`, `double`, `bool`, `List<T>`, `Map<K,V>`, `DateTime`, `Duration`) with sensible defaults.
 - **Graceful fallback**: Never crash on nulls or invalid input—get empty, zero, or null values as appropriate.
 - **Consistent encoding**: Convert Dart types back to JSON-ready primitives.
 - **Utility checks**: Quickly verify if a string is decodable as a list or map.
@@ -21,7 +21,7 @@ A robust Dart package for safe, predictable, and ergonomic conversion between JS
 
 ```yaml
 dependencies:
-  from_json_to_json: ^0.1.0
+  from_json_to_json: ^0.2.0
 ```
 
 ```dart
@@ -29,6 +29,8 @@ import 'package:from_json_to_json/from_json_to_json.dart';
 
 final list = jsonDecodeList('[1,2,3]'); // [1, 2, 3]
 final map = jsonDecodeMap('{"a":1}');
+final typedList = jsonDecodeListAs<int>('[1,2,3]'); // List<int> [1, 2, 3]
+final typedMap = jsonDecodeMapAs<String, int>('{"a":1}'); // Map<String, int>
 final dt = dateTimeFromIso8601String('2024-01-01T12:00:00Z');
 final duration = jsonDecodeDurationInSeconds('1.5'); // 1.5 seconds
 final n = jsonDecodeInt('42'); // 42
@@ -37,34 +39,36 @@ final b = jsonDecodeBool('true'); // true
 
 ## API Overview
 
-| Type     | Function                            | Description                                              |
-| -------- | ----------------------------------- | -------------------------------------------------------- |
-| List     | `jsonDecodeList`                    | Decode JSON string to list, always returns a list        |
-| List     | `verifyListDecodability`            | Check if string is a JSON array                          |
-| Map      | `jsonDecodeMap`                     | Decode JSON string to map, always returns a map          |
-| Map      | `jsonDecodeNullableMap`             | Decode JSON string to map, returns null if empty/invalid |
-| Map      | `jsonDecodeThrowableMap`            | Decode JSON string to map, throws on error               |
-| Map      | `verifyMapDecodability`             | Check if string is a JSON object                         |
-| String   | `jsonDecodeString`                  | Convert dynamic to string, empty if null                 |
-| String   | `jsonEncodeString`                  | Identity for string encoding                             |
-| int      | `jsonDecodeInt`                     | Convert dynamic to int, 0 if invalid                     |
-| int      | `jsonDecodeNullableInt`             | Convert dynamic to int, null if invalid                  |
-| int      | `jsonEncodeInt`                     | Identity for int encoding                                |
-| double   | `jsonDecodeDouble`                  | Convert dynamic to double, 0 if invalid                  |
-| double   | `jsonDecodeNullableDouble`          | Convert dynamic to double, null if invalid               |
-| double   | `jsonEncodeDouble`                  | Identity for double encoding                             |
-| bool     | `jsonDecodeBool`                    | Convert dynamic to bool, false if invalid                |
-| bool     | `jsonEncodeBool`                    | Identity for bool encoding                               |
-| DateTime | `dateTimeFromMilisecondsSinceEpoch` | int? → DateTime?                                         |
-| DateTime | `dateTimeToMilisecondsSinceEpoch`   | DateTime? → int?                                         |
-| DateTime | `dateTimeFromIso8601String`         | String? → DateTime?                                      |
-| DateTime | `dateTimeToIso8601String`           | DateTime? → String?                                      |
-| Duration | `jsonDecodeDurationInSeconds`       | dynamic → Duration (seconds, supports double)            |
-| Duration | `jsonDecodeDurationInMicroseconds`  | dynamic → Duration (microseconds)                        |
-| Duration | `jsonDecodeDurationInMinutes`       | dynamic → Duration (minutes, supports double)            |
-| Duration | `jsonEncodeDurationInSeconds`       | Duration → int (seconds)                                 |
-| Duration | `jsonEncodeDurationInMicroseconds`  | Duration → int (microseconds)                            |
-| Duration | `jsonEncodeDurationInMinutes`       | Duration → int (minutes)                                 |
+| Type     | Function                            | Description                                               |
+| -------- | ----------------------------------- | --------------------------------------------------------- |
+| List     | `jsonDecodeList`                    | Decode JSON to list, always returns a list                |
+| List     | `jsonDecodeListAs<T>`               | Decode JSON to typed List<T>, may throw on type mismatch  |
+| List     | `verifyListDecodability`            | Check if input is a JSON array                            |
+| Map      | `jsonDecodeMap`                     | Decode JSON to map, always returns a map                  |
+| Map      | `jsonDecodeMapAs<K,V>`              | Decode JSON to typed Map<K,V>, may throw on type mismatch |
+| Map      | `jsonDecodeNullableMap`             | Decode JSON to map, returns null if empty/invalid         |
+| Map      | `jsonDecodeThrowableMap`            | Decode JSON to map, throws on error                       |
+| Map      | `verifyMapDecodability`             | Check if input is a JSON object                           |
+| String   | `jsonDecodeString`                  | Convert dynamic to string, empty if null                  |
+| String   | `jsonEncodeString`                  | Identity for string encoding                              |
+| int      | `jsonDecodeInt`                     | Convert dynamic to int, 0 if invalid                      |
+| int      | `jsonDecodeNullableInt`             | Convert dynamic to int, null if invalid                   |
+| int      | `jsonEncodeInt`                     | Identity for int encoding                                 |
+| double   | `jsonDecodeDouble`                  | Convert dynamic to double, 0 if invalid                   |
+| double   | `jsonDecodeNullableDouble`          | Convert dynamic to double, null if invalid                |
+| double   | `jsonEncodeDouble`                  | Identity for double encoding                              |
+| bool     | `jsonDecodeBool`                    | Convert dynamic to bool, false if invalid                 |
+| bool     | `jsonEncodeBool`                    | Identity for bool encoding                                |
+| DateTime | `dateTimeFromMilisecondsSinceEpoch` | int? → DateTime?                                          |
+| DateTime | `dateTimeToMilisecondsSinceEpoch`   | DateTime? → int?                                          |
+| DateTime | `dateTimeFromIso8601String`         | String? → DateTime?                                       |
+| DateTime | `dateTimeToIso8601String`           | DateTime? → String?                                       |
+| Duration | `jsonDecodeDurationInSeconds`       | dynamic → Duration (seconds, supports double)             |
+| Duration | `jsonDecodeDurationInMicroseconds`  | dynamic → Duration (microseconds)                         |
+| Duration | `jsonDecodeDurationInMinutes`       | dynamic → Duration (minutes, supports double)             |
+| Duration | `jsonEncodeDurationInSeconds`       | Duration → int (seconds)                                  |
+| Duration | `jsonEncodeDurationInMicroseconds`  | Duration → int (microseconds)                             |
+| Duration | `jsonEncodeDurationInMinutes`       | Duration → int (minutes)                                  |
 
 ## Examples
 
@@ -72,6 +76,7 @@ final b = jsonDecodeBool('true'); // true
 
 ```dart
 jsonDecodeList('[1,2,3]'); // [1, 2, 3]
+jsonDecodeListAs<int>('[1,2,3]'); // List<int> [1, 2, 3]
 jsonDecodeList(''); // []
 jsonDecodeList('invalid'); // throws FormatException
 verifyListDecodability('[1,2]'); // true
@@ -81,6 +86,7 @@ verifyListDecodability('[1,2]'); // true
 
 ```dart
 jsonDecodeMap('{"a":1}'); // {a: 1}
+jsonDecodeMapAs<String, int>('{"a":1}'); // Map<String, int> {a: 1}
 jsonDecodeMap(''); // {}
 jsonDecodeMap('invalid'); // throws FormatException
 jsonDecodeNullableMap('{}'); // null
