@@ -1,3 +1,7 @@
+## 0.2.1
+
+- perf: dateTimeFromIso8601String added check for empty strings
+
 ## 0.2.0
 
 ### Added

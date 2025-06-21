@@ -33,10 +33,11 @@ int? dateTimeToMilisecondsSinceEpoch(final DateTime? dateTime) {
 ///
 /// [value] The ISO 8601 string to convert.
 /// returns The [DateTime] object or null if the input is null.
-DateTime? dateTimeFromIso8601String(final String? value) {
-  if (value == null) return null;
-  return DateTime.tryParse(value);
-}
+DateTime? dateTimeFromIso8601String(final String? value) => switch (value) {
+  null => null,
+  '' => null,
+  _ => DateTime.tryParse(value),
+};
 
 /// Converts a [DateTime] object to an ISO 8601 string.
 ///

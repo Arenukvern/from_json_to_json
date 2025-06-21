@@ -1,6 +1,6 @@
 name: from_json_to_json
 description: A small set utilities to safely convert JSON to values and back
-version: 0.2.0
+version: 0.2.1
 homepage: https://github.com/arenukvern/from_json_to_json
 environment:
   sdk: ">=3.7.0 <4.0.0"
