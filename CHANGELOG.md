@@ -6,7 +6,7 @@ BREAKING:
   dart 3.8.0
   is_dart_empty_or_not: ^0.2.3
   lints: ^6.0.0
-  xsoulspace_lints: ^0.1.0
+  xsoulspace_lints: ^0.1.1
 
 - feat: `dateTimeFromYYYYMMDDHMMSSAM`: Parse custom "YYYY-MM-DD H:MM:SS AM/PM" strings to `DateTime?`
 - feat: `dateTimeToYYYYMMDDHMMSSAM`: Format `DateTime?` as "YYYY-MM-DD H:MM:SS AM/PM" string
