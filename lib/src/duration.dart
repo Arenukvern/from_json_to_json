@@ -159,18 +159,20 @@ int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
 /// jsonDecodeDurationFromISO8601(null); // Duration.zero
 /// ```
 ///
-/// @ai Use this function to parse ISO 8601 duration strings into [Duration] objects.
+/// @ai Use this function to parse ISO 8601 duration strings into [Duration]
+/// objects.
 Duration jsonDecodeDurationFromISO8601(final String? iso8601Duration) {
   if (iso8601Duration == null || iso8601Duration.isEmpty) {
     return Duration.zero;
   }
 
-  // Accept strings with or without leading 'P'. Time portion (after 'T') is not supported.
+  // Accept strings with or without leading 'P'. Time portion (after 'T')
+  //is not supported.
   final input = iso8601Duration.trim();
   if (input.isEmpty) return Duration.zero;
-  if (input.contains('T'))
+  if (input.contains('T')) {
     return Duration.zero; // explicitly ignore time portion
-
+  }
   final reg = RegExp(r'^P?(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?$');
   final match = reg.firstMatch(input);
   if (match == null) return Duration.zero;
@@ -181,7 +183,8 @@ Duration jsonDecodeDurationFromISO8601(final String? iso8601Duration) {
   final weeks = toInt(match.group(3));
   final days = toInt(match.group(4));
 
-  // Negative values are not allowed (regex prevents '-' anyway), treat zero as Duration.zero.
+  // Negative values are not allowed (regex prevents '-' anyway),
+  //treat zero as Duration.zero.
   final totalDays = years * 365 + months * 30 + weeks * 7 + days;
   if (totalDays <= 0) return Duration.zero;
   return Duration(days: totalDays);
@@ -233,7 +236,8 @@ Duration jsonDecodeDurationFromISO8601(final String? iso8601Duration) {
 /// jsonEncodeDurationToISO8601(Duration.zero); // "P0D"
 /// ```
 ///
-/// @ai Use this function to convert [Duration] objects to ISO 8601 duration strings.
+/// @ai Use this function to convert [Duration] objects to ISO 8601
+/// duration strings.
 String jsonEncodeDurationToISO8601(final Duration duration) {
   if (duration.isNegative || duration.inDays == 0) {
     return 'P0D';

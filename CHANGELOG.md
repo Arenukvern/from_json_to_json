@@ -2,11 +2,17 @@
 
 BREAKING:
 
+- fixed typos.
+  Migration: rename call sites to the corrected names.
+
+  - dateTimeFromMilisecondsSinceEpoch -> dateTimeFromMillisecondsSinceEpoch
+  - dateTimeToMilisecondsSinceEpoch -> dateTimeToMillisecondsSinceEpoch
+
 - chore:
   dart 3.8.0
   is_dart_empty_or_not: ^0.2.3
   lints: ^6.0.0
-  xsoulspace_lints: ^0.1.1
+  xsoulspace_lints: ^0.1.2
 
 - feat: `dateTimeFromYYYYMMDDHMMSSAM`: Parse custom "YYYY-MM-DD H:MM:SS AM/PM" strings to `DateTime?`
 - feat: `dateTimeToYYYYMMDDHMMSSAM`: Format `DateTime?` as "YYYY-MM-DD H:MM:SS AM/PM" string
@@ -24,8 +30,6 @@ BREAKING:
   - Supports complex durations with multiple units (e.g., "P1Y6M2W3D")
   - Returns "P0D" for zero or negative durations
   - Perfect for API responses, configuration serialization, and data exchange
-
-- fix: typo in dateTimeToMillisecondsSinceEpoch and dateTimeFromMillisecondsSinceEpoch
 
 ## 0.2.1
 
