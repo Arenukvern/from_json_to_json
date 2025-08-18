@@ -7,7 +7,9 @@
 ///
 /// @ai Use this function to convert timestamps from external sources into
 /// [DateTime] objects for easier manipulation.
-DateTime? dateTimeFromMilisecondsSinceEpoch(final int? millisecondsSinceEpoch) {
+DateTime? dateTimeFromMillisecondsSinceEpoch(
+  final int? millisecondsSinceEpoch,
+) {
   if (millisecondsSinceEpoch == null) return null;
   return DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
 }
@@ -21,7 +23,7 @@ DateTime? dateTimeFromMilisecondsSinceEpoch(final int? millisecondsSinceEpoch) {
 ///
 /// @ai Use this function to serialize [DateTime] objects for storage or
 /// transmission.
-int? dateTimeToMilisecondsSinceEpoch(final DateTime? dateTime) {
+int? dateTimeToMillisecondsSinceEpoch(final DateTime? dateTime) {
   if (dateTime == null) return null;
 
   return dateTime.millisecondsSinceEpoch;

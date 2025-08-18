@@ -7,25 +7,25 @@ void main() {
     final testMilliseconds = testDateTime.millisecondsSinceEpoch;
     final testIso8601 = testDateTime.toIso8601String();
 
-    group('dateTimeFromMilisecondsSinceEpoch', () {
+    group('dateTimeFromMillisecondsSinceEpoch', () {
       test('converts valid milliseconds to DateTime', () {
-        final result = dateTimeFromMilisecondsSinceEpoch(testMilliseconds);
+        final result = dateTimeFromMillisecondsSinceEpoch(testMilliseconds);
         expect(result, testDateTime);
       });
 
       test('returns null for null input', () {
-        expect(dateTimeFromMilisecondsSinceEpoch(null), null);
+        expect(dateTimeFromMillisecondsSinceEpoch(null), null);
       });
     });
 
-    group('dateTimeToMilisecondsSinceEpoch', () {
+    group('dateTimeToMillisecondsSinceEpoch', () {
       test('converts DateTime to milliseconds', () {
-        final result = dateTimeToMilisecondsSinceEpoch(testDateTime);
+        final result = dateTimeToMillisecondsSinceEpoch(testDateTime);
         expect(result, testMilliseconds);
       });
 
       test('returns null for null input', () {
-        expect(dateTimeToMilisecondsSinceEpoch(null), null);
+        expect(dateTimeToMillisecondsSinceEpoch(null), null);
       });
     });
 
