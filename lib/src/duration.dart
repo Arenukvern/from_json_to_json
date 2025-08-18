@@ -116,7 +116,9 @@ int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
 ///
 /// ISO 8601 duration format is a standardized way to represent time periods
 /// using the format "PnYnMnWnDTnHnMnS" where:
-/// - P: Period designator (required)
+/// - P: Period designator (required in strict ISO 8601,
+/// but optional for Y/M/W/D units in this implementation)
+/// - n: Number of years, months, weeks, or days
 /// - Y: Years
 /// - M: Months (when before T) or Minutes (when after T)
 /// - W: Weeks
@@ -142,11 +144,19 @@ int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
 /// - "P30D" = 30 days
 /// - "P1Y6M" = 1 year 6 months (540 days)
 /// - "P1Y6M2W3D" = 1 year 6 months 2 weeks 3 days (557 days)
+/// - "1Y" = 1 year (365 days) - shorthand without 'P'
+/// - "6M" = 6 months (180 days) - shorthand without 'P'
+/// - "2W" = 2 weeks (14 days) - shorthand without 'P'
+/// - "30D" = 30 days - shorthand without 'P'
 ///
 /// Note: This implementation uses approximate conversions:
 /// - 1 year = 365 days
 /// - 1 month = 30 days
 /// - 1 week = 7 days
+/// - 1 day = 1 day
+///
+/// The leading 'P' is optional for Y/M/W/D units, providing ergonomic shorthand
+/// while maintaining compatibility with strict ISO 8601 format.
 ///
 /// Returns [Duration.zero] for null, empty, or invalid input.
 ///

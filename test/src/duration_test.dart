@@ -113,6 +113,10 @@ void main() {
       });
 
       test('handles duration without P prefix', () {
+        // jsonDecodeDurationFromISO8601 accepts shorthand durations
+        // without the leading 'P'
+        // for Y/M/W/D units with approximate conversions:
+        // 1Y=365d, 1M=30d, 1W=7d, 1D=1d
         expect(jsonDecodeDurationFromISO8601('1Y'), const Duration(days: 365));
         expect(jsonDecodeDurationFromISO8601('6M'), const Duration(days: 180));
         expect(jsonDecodeDurationFromISO8601('2W'), const Duration(days: 14));
