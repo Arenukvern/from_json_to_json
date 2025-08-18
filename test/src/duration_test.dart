@@ -175,6 +175,42 @@ void main() {
           const Duration(days: 30),
         );
       });
+
+      test('parses combined units correctly', () {
+        expect(
+          jsonDecodeDurationFromISO8601('P1Y6M'), // 1 year 6 months
+          const Duration(days: 545), // 365 + 180 = 545 days
+        );
+        expect(
+          jsonDecodeDurationFromISO8601('P1Y6M2W'), // 1 year 6 months 2 weeks
+          const Duration(days: 559), // 365 + 180 + 14 = 559 days
+        );
+        expect(
+          jsonDecodeDurationFromISO8601(
+            'P1Y6M2W3D',
+          ), // 1 year 6 months 2 weeks 3 days
+          const Duration(days: 562), // 365 + 180 + 14 + 3 = 562 days
+        );
+        expect(
+          jsonDecodeDurationFromISO8601('P6M2W3D'), // 6 months 2 weeks 3 days
+          const Duration(days: 197), // 180 + 14 + 3 = 197 days
+        );
+        expect(
+          jsonDecodeDurationFromISO8601('P2W3D'), // 2 weeks 3 days
+          const Duration(days: 17), // 14 + 3 = 17 days
+        );
+      });
+
+      test('handles combined units without P prefix', () {
+        expect(
+          jsonDecodeDurationFromISO8601('1Y6M'), // 1 year 6 months
+          const Duration(days: 545),
+        );
+        expect(
+          jsonDecodeDurationFromISO8601('6M2W3D'), // 6 months 2 weeks 3 days
+          const Duration(days: 197),
+        );
+      });
     });
 
     group('jsonEncodeDurationToISO8601', () {

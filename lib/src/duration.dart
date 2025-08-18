@@ -126,7 +126,7 @@ int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
 /// - M: Minutes (when after T)
 /// - S: Seconds
 ///
-/// This function currently supports basic date components (Y, M, W, D) without
+/// This function supports combined date components (Y, M, W, D) without
 /// the time portion for simplicity. It's commonly used in:
 /// - API specifications (OpenAPI, GraphQL)
 /// - Configuration files
@@ -141,6 +141,7 @@ int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
 /// - "P2W" = 2 weeks (14 days)
 /// - "P30D" = 30 days
 /// - "P1Y6M" = 1 year 6 months (540 days)
+/// - "P1Y6M2W3D" = 1 year 6 months 2 weeks 3 days (557 days)
 ///
 /// Note: This implementation uses approximate conversions:
 /// - 1 year = 365 days
@@ -150,11 +151,12 @@ int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
 /// Returns [Duration.zero] for null, empty, or invalid input.
 ///
 /// ```dart
-/// durationFromISO8601('P1Y'); // 365 days
-/// durationFromISO8601('P6M'); // 180 days
-/// durationFromISO8601('P2W'); // 14 days
-/// durationFromISO8601('P30D'); // 30 days
-/// durationFromISO8601(null); // Duration.zero
+/// jsonDecodeDurationFromISO8601('P1Y'); // 365 days
+/// jsonDecodeDurationFromISO8601('P6M'); // 180 days
+/// jsonDecodeDurationFromISO8601('P2W'); // 14 days
+/// jsonDecodeDurationFromISO8601('P30D'); // 30 days
+/// jsonDecodeDurationFromISO8601('P1Y6M'); // 540 days
+/// jsonDecodeDurationFromISO8601(null); // Duration.zero
 /// ```
 ///
 /// @ai Use this function to parse ISO 8601 duration strings into [Duration] objects.
@@ -163,36 +165,26 @@ Duration jsonDecodeDurationFromISO8601(final String? iso8601Duration) {
     return Duration.zero;
   }
 
-  // Remove 'P' prefix if present
-  final duration = iso8601Duration.startsWith('P')
-      ? iso8601Duration.substring(1)
-      : iso8601Duration;
+  // Accept strings with or without leading 'P'. Time portion (after 'T') is not supported.
+  final input = iso8601Duration.trim();
+  if (input.isEmpty) return Duration.zero;
+  if (input.contains('T'))
+    return Duration.zero; // explicitly ignore time portion
 
-  // Parse different units
-  if (duration.endsWith('Y')) {
-    final years = int.tryParse(duration.substring(0, duration.length - 1)) ?? 0;
-    // Handle negative values by returning zero
-    if (years < 0) return Duration.zero;
-    return Duration(days: years * 365);
-  } else if (duration.endsWith('M')) {
-    final months =
-        int.tryParse(duration.substring(0, duration.length - 1)) ?? 0;
-    // Handle negative values by returning zero
-    if (months < 0) return Duration.zero;
-    return Duration(days: months * 30);
-  } else if (duration.endsWith('W')) {
-    final weeks = int.tryParse(duration.substring(0, duration.length - 1)) ?? 0;
-    // Handle negative values by returning zero
-    if (weeks < 0) return Duration.zero;
-    return Duration(days: weeks * 7);
-  } else if (duration.endsWith('D')) {
-    final days = int.tryParse(duration.substring(0, duration.length - 1)) ?? 0;
-    // Handle negative values by returning zero
-    if (days < 0) return Duration.zero;
-    return Duration(days: days);
-  }
+  final reg = RegExp(r'^P?(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?$');
+  final match = reg.firstMatch(input);
+  if (match == null) return Duration.zero;
 
-  return Duration.zero;
+  int toInt(final String? s) => s == null ? 0 : int.tryParse(s) ?? 0;
+  final years = toInt(match.group(1));
+  final months = toInt(match.group(2));
+  final weeks = toInt(match.group(3));
+  final days = toInt(match.group(4));
+
+  // Negative values are not allowed (regex prevents '-' anyway), treat zero as Duration.zero.
+  final totalDays = years * 365 + months * 30 + weeks * 7 + days;
+  if (totalDays <= 0) return Duration.zero;
+  return Duration(days: totalDays);
 }
 
 /// Converts a [Duration] to ISO 8601 duration format string.
