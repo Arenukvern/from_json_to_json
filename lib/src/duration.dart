@@ -156,6 +156,8 @@ int jsonEncodeDurationInMinutes(final Duration duration) => duration.inMinutes;
 /// durationFromISO8601('P30D'); // 30 days
 /// durationFromISO8601(null); // Duration.zero
 /// ```
+///
+/// @ai Use this function to parse ISO 8601 duration strings into [Duration] objects.
 Duration jsonDecodeDurationFromISO8601(final String? iso8601Duration) {
   if (iso8601Duration == null || iso8601Duration.isEmpty) {
     return Duration.zero;
@@ -191,4 +193,97 @@ Duration jsonDecodeDurationFromISO8601(final String? iso8601Duration) {
   }
 
   return Duration.zero;
+}
+
+/// Converts a [Duration] to ISO 8601 duration format string.
+///
+/// ISO 8601 duration format is a standardized way to represent time periods
+/// using the format "PnYnMnWnDTnHnMnS" where:
+/// - P: Period designator (required)
+/// - Y: Years
+/// - M: Months (when before T) or Minutes (when after T)
+/// - W: Weeks
+/// - D: Days
+/// - T: Time designator (separates date and time components)
+/// - H: Hours
+/// - M: Minutes (when after T)
+/// - S: Seconds
+///
+/// This function converts a Duration to the most appropriate ISO 8601 format
+/// by prioritizing larger units (years, months, weeks, days) for readability.
+/// It's commonly used in:
+/// - API specifications (OpenAPI, GraphQL)
+/// - Configuration files
+/// - Data serialization formats
+/// - Calendar applications
+/// - Business process modeling
+/// - Legal documents and contracts
+///
+/// Examples:
+/// - Duration(days: 365) → "P1Y"
+/// - Duration(days: 180) → "P6M"
+/// - Duration(days: 14) → "P2W"
+/// - Duration(days: 30) → "P30D"
+/// - Duration(days: 540) → "P1Y6M"
+///
+/// Note: This implementation uses approximate conversions:
+/// - 365 days = 1 year
+/// - 30 days = 1 month
+/// - 7 days = 1 week
+///
+/// Returns "P0D" for zero or negative durations.
+///
+/// ```dart
+/// jsonEncodeDurationToISO8601(Duration(days: 365)); // "P1Y"
+/// jsonEncodeDurationToISO8601(Duration(days: 180)); // "P6M"
+/// jsonEncodeDurationToISO8601(Duration(days: 14)); // "P2W"
+/// jsonEncodeDurationToISO8601(Duration(days: 30)); // "P30D"
+/// jsonEncodeDurationToISO8601(Duration.zero); // "P0D"
+/// ```
+///
+/// @ai Use this function to convert [Duration] objects to ISO 8601 duration strings.
+String jsonEncodeDurationToISO8601(final Duration duration) {
+  if (duration.isNegative || duration.inDays == 0) {
+    return 'P0D';
+  }
+
+  final totalDays = duration.inDays;
+
+  // Calculate years (365 days each)
+  final years = totalDays ~/ 365;
+  final remainingDaysAfterYears = totalDays % 365;
+
+  // Calculate months (30 days each) from remaining days
+  final months = remainingDaysAfterYears ~/ 30;
+  final remainingDaysAfterMonths = remainingDaysAfterYears % 30;
+
+  // Calculate weeks (7 days each) from remaining days
+  final weeks = remainingDaysAfterMonths ~/ 7;
+  final remainingDaysAfterWeeks = remainingDaysAfterMonths % 7;
+
+  // Build the ISO 8601 string
+  final buffer = StringBuffer('P');
+
+  if (years > 0) {
+    buffer.write('${years}Y');
+  }
+
+  if (months > 0) {
+    buffer.write('${months}M');
+  }
+
+  if (weeks > 0) {
+    buffer.write('${weeks}W');
+  }
+
+  if (remainingDaysAfterWeeks > 0) {
+    buffer.write('${remainingDaysAfterWeeks}D');
+  }
+
+  // If no components were added, return P0D
+  if (buffer.length == 1) {
+    return 'P0D';
+  }
+
+  return buffer.toString();
 }

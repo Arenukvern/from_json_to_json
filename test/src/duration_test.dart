@@ -176,5 +176,123 @@ void main() {
         );
       });
     });
+
+    group('jsonEncodeDurationToISO8601', () {
+      test('encodes years correctly', () {
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 365)), 'P1Y');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 730)), 'P2Y');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 1095)), 'P3Y');
+      });
+
+      test('encodes months correctly', () {
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 30)), 'P1M');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 180)), 'P6M');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 360)), 'P12M');
+      });
+
+      test('encodes weeks correctly', () {
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 7)), 'P1W');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 14)), 'P2W');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 21)), 'P3W');
+      });
+
+      test('encodes days correctly', () {
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 1)), 'P1D');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 5)), 'P5D');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 29)), 'P4W1D');
+      });
+
+      test('encodes complex durations with multiple units', () {
+        expect(
+          jsonEncodeDurationToISO8601(const Duration(days: 395)), // 1Y + 1M
+          'P1Y1M',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(
+            const Duration(days: 540),
+          ), // 1Y + 5M + 3W + 4D
+          'P1Y5M3W4D',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(
+            const Duration(days: 372),
+          ), // 1Y + 7D = 1Y + 1W
+          'P1Y1W',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(
+            const Duration(days: 45),
+          ), // 1M + 15D = 1M + 2W + 1D
+          'P1M2W1D',
+        );
+      });
+
+      test('handles edge cases', () {
+        expect(jsonEncodeDurationToISO8601(Duration.zero), 'P0D');
+        expect(jsonEncodeDurationToISO8601(const Duration(days: -1)), 'P0D');
+        expect(jsonEncodeDurationToISO8601(const Duration(hours: 23)), 'P0D');
+        expect(
+          jsonEncodeDurationToISO8601(const Duration(minutes: 1440)),
+          'P1D',
+        );
+        expect(jsonEncodeDurationToISO8601(const Duration(days: 1)), 'P1D');
+      });
+
+      test('handles large durations', () {
+        expect(
+          jsonEncodeDurationToISO8601(const Duration(days: 36500)), // 100 years
+          'P100Y',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(
+            const Duration(days: 36000),
+          ), // 98Y + 7M + 2W + 6D
+          'P98Y7M2W6D',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(
+            const Duration(days: 7000),
+          ), // 19Y + 2M + 5D
+          'P19Y2M5D',
+        );
+      });
+
+      test('round-trip compatibility with jsonDecodeDurationFromISO8601', () {
+        final testDurations = [
+          const Duration(days: 365), // 1 year
+          const Duration(days: 180), // 6 months
+          const Duration(days: 14), // 2 weeks
+          const Duration(days: 30), // 1 month
+          const Duration(days: 7), // 1 week
+          const Duration(days: 1), // 1 day
+        ];
+
+        for (final duration in testDurations) {
+          final isoString = jsonEncodeDurationToISO8601(duration);
+          final decodedDuration = jsonDecodeDurationFromISO8601(isoString);
+          expect(decodedDuration, duration);
+        }
+      });
+
+      test('real-world usage examples', () {
+        // Common business periods
+        expect(
+          jsonEncodeDurationToISO8601(const Duration(days: 365)), // 1 year
+          'P1Y',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(const Duration(days: 180)), // 6 months
+          'P6M',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(const Duration(days: 14)), // 2 weeks
+          'P2W',
+        );
+        expect(
+          jsonEncodeDurationToISO8601(const Duration(days: 30)), // 1 month
+          'P1M',
+        );
+      });
+    });
   });
 }
