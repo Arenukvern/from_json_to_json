@@ -7,25 +7,25 @@ void main() {
     final testMilliseconds = testDateTime.millisecondsSinceEpoch;
     final testIso8601 = testDateTime.toIso8601String();
 
-    group('dateTimeFromMilisecondsSinceEpoch', () {
+    group('dateTimeFromMillisecondsSinceEpoch', () {
       test('converts valid milliseconds to DateTime', () {
-        final result = dateTimeFromMilisecondsSinceEpoch(testMilliseconds);
+        final result = dateTimeFromMillisecondsSinceEpoch(testMilliseconds);
         expect(result, testDateTime);
       });
 
       test('returns null for null input', () {
-        expect(dateTimeFromMilisecondsSinceEpoch(null), null);
+        expect(dateTimeFromMillisecondsSinceEpoch(null), null);
       });
     });
 
-    group('dateTimeToMilisecondsSinceEpoch', () {
+    group('dateTimeToMillisecondsSinceEpoch', () {
       test('converts DateTime to milliseconds', () {
-        final result = dateTimeToMilisecondsSinceEpoch(testDateTime);
+        final result = dateTimeToMillisecondsSinceEpoch(testDateTime);
         expect(result, testMilliseconds);
       });
 
       test('returns null for null input', () {
-        expect(dateTimeToMilisecondsSinceEpoch(null), null);
+        expect(dateTimeToMillisecondsSinceEpoch(null), null);
       });
     });
 
@@ -52,6 +52,105 @@ void main() {
 
       test('returns null for null input', () {
         expect(dateTimeToIso8601String(null), null);
+      });
+    });
+
+    group('dateTimeFromYYYYMMDDHMMSSAM', () {
+      test('converts valid custom format string to DateTime (AM)', () {
+        const customString = '2025-08-17 7:44:54 AM';
+        final expected = DateTime(2025, 8, 17, 7, 44, 54);
+        final result = dateTimeFromYYYYMMDDHMMSSAM(customString);
+        expect(result, expected);
+      });
+
+      test('converts valid custom format string to DateTime (PM)', () {
+        const customString = '2025-08-17 7:44:54 PM';
+        final expected = DateTime(2025, 8, 17, 19, 44, 54);
+        final result = dateTimeFromYYYYMMDDHMMSSAM(customString);
+        expect(result, expected);
+      });
+
+      test('converts 12:00:00 AM to midnight', () {
+        const customString = '2025-08-17 12:00:00 AM';
+        final expected = DateTime(2025, 8, 17);
+        final result = dateTimeFromYYYYMMDDHMMSSAM(customString);
+        expect(result, expected);
+      });
+
+      test('converts 12:00:00 PM to noon', () {
+        const customString = '2025-08-17 12:00:00 PM';
+        final expected = DateTime(2025, 8, 17, 12);
+        final result = dateTimeFromYYYYMMDDHMMSSAM(customString);
+        expect(result, expected);
+      });
+
+      test('handles single digit hours', () {
+        const customString = '2025-08-17 1:05:30 AM';
+        final expected = DateTime(2025, 8, 17, 1, 5, 30);
+        final result = dateTimeFromYYYYMMDDHMMSSAM(customString);
+        expect(result, expected);
+      });
+
+      test('returns null for invalid format', () {
+        expect(dateTimeFromYYYYMMDDHMMSSAM('invalid date'), null);
+        expect(dateTimeFromYYYYMMDDHMMSSAM('2025-08-17'), null);
+        expect(dateTimeFromYYYYMMDDHMMSSAM('2025-08-17 7:44:54'), null);
+        expect(dateTimeFromYYYYMMDDHMMSSAM('2025/08/17 7:44:54 AM'), null);
+      });
+
+      test('returns null for null input', () {
+        expect(dateTimeFromYYYYMMDDHMMSSAM(null), null);
+      });
+
+      test('returns null for empty string', () {
+        expect(dateTimeFromYYYYMMDDHMMSSAM(''), null);
+      });
+
+      test('returns null for invalid time components', () {
+        expect(dateTimeFromYYYYMMDDHMMSSAM('2025-08-17 25:44:54 AM'), null);
+        expect(dateTimeFromYYYYMMDDHMMSSAM('2025-08-17 7:60:54 AM'), null);
+        expect(dateTimeFromYYYYMMDDHMMSSAM('2025-08-17 7:44:60 AM'), null);
+      });
+    });
+
+    group('dateTimeToYYYYMMDDHMMSSAM', () {
+      test('converts DateTime to custom format string (AM)', () {
+        final dateTime = DateTime(2025, 8, 17, 7, 44, 54);
+        const expected = '2025-08-17 7:44:54 AM';
+        final result = dateTimeToYYYYMMDDHMMSSAM(dateTime);
+        expect(result, expected);
+      });
+
+      test('converts DateTime to custom format string (PM)', () {
+        final dateTime = DateTime(2025, 8, 17, 19, 44, 54);
+        const expected = '2025-08-17 7:44:54 PM';
+        final result = dateTimeToYYYYMMDDHMMSSAM(dateTime);
+        expect(result, expected);
+      });
+
+      test('converts midnight to 12:00:00 AM', () {
+        final dateTime = DateTime(2025, 8, 17);
+        const expected = '2025-08-17 12:00:00 AM';
+        final result = dateTimeToYYYYMMDDHMMSSAM(dateTime);
+        expect(result, expected);
+      });
+
+      test('converts noon to 12:00:00 PM', () {
+        final dateTime = DateTime(2025, 8, 17, 12);
+        const expected = '2025-08-17 12:00:00 PM';
+        final result = dateTimeToYYYYMMDDHMMSSAM(dateTime);
+        expect(result, expected);
+      });
+
+      test('pads single digit months and days with zeros', () {
+        final dateTime = DateTime(2025, 1, 5, 9, 3, 7);
+        const expected = '2025-01-05 9:03:07 AM';
+        final result = dateTimeToYYYYMMDDHMMSSAM(dateTime);
+        expect(result, expected);
+      });
+
+      test('returns null for null input', () {
+        expect(dateTimeToYYYYMMDDHMMSSAM(null), null);
       });
     });
   });
