@@ -1,3 +1,20 @@
+## 0.4.0
+
+BREAKING:
+dependencies update
+
+```yaml
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+
+dependencies:
+  collection: ^1.19.1
+  is_dart_empty_or_not: ^0.3.0
+dev_dependencies:
+  coverage: ^1.15.0
+  test: ^1.29.0
+```
+
 ## 0.3.0
 
 BREAKING:
