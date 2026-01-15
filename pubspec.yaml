@@ -1,6 +1,6 @@
 name: from_json_to_json
 description: A small set utilities to safely convert JSON to values and back
-version: 0.3.0
+version: 0.4.0
 homepage: https://github.com/arenukvern/from_json_to_json
 repository: https://github.com/arenukvern/from_json_to_json
 issue_tracker: https://github.com/arenukvern/from_json_to_json/issues
@@ -13,16 +13,16 @@ topics:
   - serialization
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
+  sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
-  collection: ^1.19.0
-  is_dart_empty_or_not: ^0.2.3
+  collection: ^1.19.1
+  is_dart_empty_or_not: ^0.3.0
 
 dev_dependencies:
-  coverage: ^1.12.0
+  coverage: ^1.15.0
   lints: ^6.0.0
-  test: ^1.26.3
+  test: ^1.29.0
   xsoulspace_lints: ^0.1.2
 # todo: add metadata
 # Additional metadata
