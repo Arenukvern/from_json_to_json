@@ -1,3 +1,18 @@
+## 0.5.0
+
+BREAKING:
+dependencies update
+
+```yaml
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+
+dependencies:
+  is_dart_empty_or_not: ^0.4.0
+dev_dependencies:
+  test: ^1.31.0
+```
+
 ## 0.4.0
 
 BREAKING:
@@ -21,7 +36,6 @@ BREAKING:
 
 - fixed typos.
   Migration: rename call sites to the corrected names.
-
   - dateTimeFromMilisecondsSinceEpoch -> dateTimeFromMillisecondsSinceEpoch
   - dateTimeToMilisecondsSinceEpoch -> dateTimeToMillisecondsSinceEpoch
 
@@ -41,7 +55,6 @@ BREAKING:
   - Returns `Duration.zero` for negative values or parsing errors
   - Commonly used in API specifications, configuration files, and calendar applications
 - feat: `jsonEncodeDurationToISO8601`: Convert `Duration` to ISO 8601 duration format string
-
   - Converts Duration objects to standardized ISO 8601 format
   - Prioritizes larger units (years, months, weeks, days) for readability
   - Supports complex durations with multiple units (e.g., "P1Y6M2W3D")
