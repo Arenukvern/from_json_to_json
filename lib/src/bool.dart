@@ -7,6 +7,8 @@ import '../from_json_to_json.dart';
 /// ```dart
 /// jsonDecodeBool('true'); // true
 /// jsonDecodeBool('false'); // false
+/// jsonDecodeBool('yes'); // true
+/// jsonDecodeBool('no'); // false
 /// jsonDecodeBool('1'); // true
 /// jsonDecodeBool('0'); // false
 /// jsonDecodeBool('1.0'); // true
@@ -17,28 +19,18 @@ import '../from_json_to_json.dart';
 /// ```
 ///
 /// @ai Use this method when you need to convert a dynamic value to a [bool].
-bool jsonDecodeBool(final dynamic value) {
-  if (value == null) return false;
-  if (value case final String string) {
-    if (string == 'true') return true;
-    if (string == 'false') return false;
-    final int intValue = jsonDecodeInt(string);
-    return intValue == 1;
-  }
-  return switch (value) {
-    final bool value => value,
-    final int value => value == 1,
-    final double value => value == 1.0,
-    _ => false,
-  };
-}
+bool jsonDecodeBool(final dynamic value) =>
+    jsonDecodeNullableBool(value) ?? false;
 
 /// Converts a dynamic value to a nullable [bool].
 ///
 /// Returns null if the input is null or cannot be converted to a [bool].
+/// String inputs are trimmed, lowercased and accept the common wire
+/// literals `true`/`false`, `yes`/`no` and numeric `1`/`0`.
 ///
 /// ```dart
 /// jsonDecodeNullableBool('true'); // true
+/// jsonDecodeNullableBool('Yes'); // true
 /// jsonDecodeNullableBool(1); // true
 /// jsonDecodeNullableBool(null); // null
 /// jsonDecodeNullableBool('invalid'); // null
@@ -49,9 +41,10 @@ bool jsonDecodeBool(final dynamic value) {
 bool? jsonDecodeNullableBool(final dynamic value) {
   if (value == null) return null;
   if (value case final String string) {
-    if (string == 'true') return true;
-    if (string == 'false') return false;
-    final int? intValue = jsonDecodeNullableInt(string);
+    final normalized = string.trim().toLowerCase();
+    if (normalized == 'true' || normalized == 'yes') return true;
+    if (normalized == 'false' || normalized == 'no') return false;
+    final int? intValue = jsonDecodeNullableInt(normalized);
     if (intValue == null) return null;
     return intValue == 1;
   }

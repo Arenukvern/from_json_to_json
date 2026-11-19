@@ -7,6 +7,10 @@ void main() {
       test('converts string representations to bool', () {
         expect(jsonDecodeBool('true'), true);
         expect(jsonDecodeBool('false'), false);
+        expect(jsonDecodeBool('yes'), true);
+        expect(jsonDecodeBool('no'), false);
+        expect(jsonDecodeBool('TRUE'), true);
+        expect(jsonDecodeBool(' No '), false);
         expect(jsonDecodeBool('1'), true);
         expect(jsonDecodeBool('0'), false);
         expect(jsonDecodeBool('1.0'), true);
@@ -62,6 +66,8 @@ void main() {
         expect(jsonDecodeNullableBool('0.0'), false);
         expect(jsonDecodeNullableBool('invalid'), null);
         expect(jsonDecodeNullableBool(''), null);
+        expect(jsonDecodeNullableBool('YES'), true);
+        expect(jsonDecodeNullableBool('No'), false);
       });
 
       test('converts numeric values, null when unknown', () {

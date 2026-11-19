@@ -3,7 +3,8 @@
 ADDED:
 
 - `jsonDecodeNullableString` — dynamic → String?, null unless the value is already a String (no `toString()` coercion; pairs with `jsonDecodeString` like `jsonDecodeNullableInt` pairs with `jsonDecodeInt`)
-- `jsonDecodeNullableBool` — dynamic → bool?, null when absent or unconvertible (same coercions as `jsonDecodeBool`)
+- `jsonDecodeNullableBool` — dynamic → bool?, null when absent or unconvertible; string inputs are trimmed, lowercased and accept `true`/`false`, `yes`/`no`, `1`/`0`
+- `jsonDecodeBool` now also accepts the `yes`/`no` and case-insensitive string literals (previously only `true`/`false` and numeric strings); delegates to `jsonDecodeNullableBool` like `jsonDecodeInt` does
 
 ## 0.5.0
 
