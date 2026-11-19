@@ -42,5 +42,38 @@ void main() {
         expect(jsonEncodeBool(false), false);
       });
     });
+
+    group('jsonDecodeNullableBool', () {
+      test('returns bool values unchanged', () {
+        expect(jsonDecodeNullableBool(true), true);
+        expect(jsonDecodeNullableBool(false), false);
+      });
+
+      test('returns null for null input', () {
+        expect(jsonDecodeNullableBool(null), null);
+      });
+
+      test('converts string representations, null when unknown', () {
+        expect(jsonDecodeNullableBool('true'), true);
+        expect(jsonDecodeNullableBool('false'), false);
+        expect(jsonDecodeNullableBool('1'), true);
+        expect(jsonDecodeNullableBool('0'), false);
+        expect(jsonDecodeNullableBool('1.0'), true);
+        expect(jsonDecodeNullableBool('0.0'), false);
+        expect(jsonDecodeNullableBool('invalid'), null);
+        expect(jsonDecodeNullableBool(''), null);
+      });
+
+      test('converts numeric values, null when unknown', () {
+        expect(jsonDecodeNullableBool(1), true);
+        expect(jsonDecodeNullableBool(0), false);
+        expect(jsonDecodeNullableBool(1.0), true);
+        expect(jsonDecodeNullableBool(0.0), false);
+        expect(jsonDecodeNullableBool(2), false); // Only 1 is true
+        expect(jsonDecodeNullableBool(2.0), false); // Only 1.0 is true
+        expect(jsonDecodeNullableBool([]), null);
+        expect(jsonDecodeNullableBool({}), null);
+      });
+    });
   });
 }

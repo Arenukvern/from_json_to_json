@@ -42,6 +42,7 @@ final b = jsonDecodeBool('true'); // true
 | Type     | Function                             | Description                                                                                                                                                             |
 | -------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | bool     | `jsonDecodeBool`                     | Convert dynamic to bool, false if invalid                                                                                                                               |
+| bool     | `jsonDecodeNullableBool`             | Convert dynamic to bool, null if invalid                                                                                                                                |
 | bool     | `jsonEncodeBool`                     | Identity for bool encoding                                                                                                                                              |
 | DateTime | `dateTimeFromIso8601String`          | String? → DateTime?                                                                                                                                                     |
 | DateTime | `dateTimeFromMillisecondsSinceEpoch` | int? → DateTime?                                                                                                                                                        |
@@ -72,6 +73,7 @@ final b = jsonDecodeBool('true'); // true
 | Map      | `jsonDecodeThrowableMap`             | Decode JSON to map, throws on error                                                                                                                                     |
 | Map      | `verifyMapDecodability`              | Check if input is a JSON object                                                                                                                                         |
 | String   | `jsonDecodeString`                   | Convert dynamic to string, empty if null                                                                                                                                |
+| String   | `jsonDecodeNullableString`           | Convert dynamic to string, null unless already a String                                                                                                                 |
 | String   | `jsonEncodeString`                   | Identity for string encoding                                                                                                                                            |
 
 ## Examples

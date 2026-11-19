@@ -33,6 +33,36 @@ bool jsonDecodeBool(final dynamic value) {
   };
 }
 
+/// Converts a dynamic value to a nullable [bool].
+///
+/// Returns null if the input is null or cannot be converted to a [bool].
+///
+/// ```dart
+/// jsonDecodeNullableBool('true'); // true
+/// jsonDecodeNullableBool(1); // true
+/// jsonDecodeNullableBool(null); // null
+/// jsonDecodeNullableBool('invalid'); // null
+/// ```
+///
+/// @ai Use when a field should keep "absent" distinct from false, e.g.
+/// `jsonDecodeNullableBool(json['enabled']) ?? true`.
+bool? jsonDecodeNullableBool(final dynamic value) {
+  if (value == null) return null;
+  if (value case final String string) {
+    if (string == 'true') return true;
+    if (string == 'false') return false;
+    final int? intValue = jsonDecodeNullableInt(string);
+    if (intValue == null) return null;
+    return intValue == 1;
+  }
+  return switch (value) {
+    final bool value => value,
+    final int value => value == 1,
+    final double value => value == 1.0,
+    _ => null,
+  };
+}
+
 /// Safe conversion of a [bool] to a JSON
 // ignore: avoid_positional_boolean_parameters
 dynamic jsonEncodeBool(final bool value) => value;

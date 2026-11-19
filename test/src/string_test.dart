@@ -25,5 +25,24 @@ void main() {
         expect(jsonEncodeString('123'), '123');
       });
     });
+
+    group('jsonDecodeNullableString', () {
+      test('returns string values unchanged', () {
+        expect(jsonDecodeNullableString('hello'), 'hello');
+        expect(jsonDecodeNullableString(''), '');
+      });
+
+      test('returns null for null input', () {
+        expect(jsonDecodeNullableString(null), null);
+      });
+
+      test('returns null instead of coercing non-strings', () {
+        expect(jsonDecodeNullableString(123), null);
+        expect(jsonDecodeNullableString(3.14), null);
+        expect(jsonDecodeNullableString(true), null);
+        expect(jsonDecodeNullableString([1, 2, 3]), null);
+        expect(jsonDecodeNullableString({'key': 'value'}), null);
+      });
+    });
   });
 }

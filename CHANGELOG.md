@@ -1,3 +1,10 @@
+## 0.5.1
+
+ADDED:
+
+- `jsonDecodeNullableString` — dynamic → String?, null unless the value is already a String (no `toString()` coercion; pairs with `jsonDecodeString` like `jsonDecodeNullableInt` pairs with `jsonDecodeInt`)
+- `jsonDecodeNullableBool` — dynamic → bool?, null when absent or unconvertible (same coercions as `jsonDecodeBool`)
+
 ## 0.5.0
 
 BREAKING:
