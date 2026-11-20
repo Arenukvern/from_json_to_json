@@ -6,6 +6,14 @@ ADDED:
 - `jsonDecodeNullableThrowableBool` — dynamic → bool?, throws ArgumentError for uninterpretable non-null shapes (absorbs intentcall_schema's deprecated stopgap)
 - `jsonDecodeNullableMapAs<K,V>` — dynamic → Map<K,V>?, null when absent/empty, throws on entry-type mismatch (absorbs intentcall_schema's deprecated stopgap)
 
+FIXED:
+
+- `jsonDecodeMap` / `jsonDecodeNullableMap` / `jsonDecodeThrowableMap` (and the `As<K,V>` variants that delegate to them) now accept maps with non-String keys — e.g. yaml-decoded `YamlMap`/`Map<dynamic, dynamic>` — by stringifying the keys. Previously these fell into the `toString()`→`jsonDecode` roundtrip and threw `FormatException` on the unquoted-key output.
+
+CHANGED:
+
+- `is_dart_empty_or_not` widened to `^0.6.0` (0.6.0 is additive: `whenEmptyOrNull`, `whenZeroOrNull`, `isNullOrBlank`).
+
 ## 0.5.2
 
 CHANGED:

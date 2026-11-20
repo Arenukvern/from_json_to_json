@@ -2,9 +2,21 @@ import 'dart:convert';
 
 import 'string.dart';
 
+/// Converts a map with non-[String] keys to a string-keyed map by
+/// stringifying each key.
+///
+/// Accepts e.g. yaml-decoded `Map<dynamic, dynamic>` values, which would
+/// otherwise fall into the [jsonDecodeString]→[jsonDecode] roundtrip and
+/// throw a [FormatException] on their unquoted-key `toString()`.
+Map<String, dynamic> _stringKeyed(final Map<dynamic, dynamic> map) => {
+      for (final entry in map.entries) '${entry.key}': entry.value,
+    };
+
 /// Decodes a JSON string into a non-empty [Map<String, dynamic>] or null.
 ///
 /// Returns null if the input is empty or decodes to an empty map.
+/// Maps with non-[String] keys (e.g. yaml-decoded values) are accepted;
+/// their keys are stringified.
 ///
 /// ```dart
 /// final result = jsonDecodeNullableMap('{"key": "value"}');
@@ -18,6 +30,9 @@ import 'string.dart';
 /// Handle errors externally.
 Map<String, dynamic>? jsonDecodeNullableMap(final dynamic json) {
   if (json case final Map<String, dynamic> map) return map.isEmpty ? null : map;
+  if (json case final Map<dynamic, dynamic> map) {
+    return map.isEmpty ? null : _stringKeyed(map);
+  }
   final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return null;
   return switch (jsonDecode(jsonString)) {
@@ -28,7 +43,8 @@ Map<String, dynamic>? jsonDecodeNullableMap(final dynamic json) {
 
 /// Decodes a JSON string into a [Map<String, dynamic>], always returning a map.
 ///
-/// Returns an empty map for invalid or empty input.
+/// Returns an empty map for invalid or empty input. Maps with non-[String]
+/// keys (e.g. yaml-decoded values) are accepted; their keys are stringified.
 ///
 /// ```dart
 /// final result = jsonDecodeMap('{"key": "value"}');
@@ -42,6 +58,9 @@ Map<String, dynamic>? jsonDecodeNullableMap(final dynamic json) {
 /// Handle errors externally.
 Map<String, dynamic> jsonDecodeMap(final dynamic json) {
   if (json case final Map<String, dynamic> map) return map.isEmpty ? {} : map;
+  if (json case final Map<dynamic, dynamic> map) {
+    return map.isEmpty ? {} : _stringKeyed(map);
+  }
   final jsonString = jsonDecodeString(json);
   if (jsonString.isEmpty) return {};
   return switch (jsonDecode(jsonString)) {
@@ -83,6 +102,7 @@ Map<K, V> jsonDecodeMapAs<K, V>(final dynamic json) =>
 /// PREFER [jsonDecodeMap] or [jsonDecodeNullableMap] for safer parsing.
 Map<String, dynamic> jsonDecodeThrowableMap(final dynamic json) {
   if (json case final Map<String, dynamic> map) return map;
+  if (json case final Map<dynamic, dynamic> map) return _stringKeyed(map);
   final jsonString = jsonDecodeString(json);
   return jsonDecode(jsonString);
 }

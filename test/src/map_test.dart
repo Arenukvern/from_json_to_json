@@ -176,4 +176,37 @@ void main() {
       );
     });
   });
+
+  group('non-String-keyed maps (yaml-shaped)', () {
+    test('jsonDecodeMap accepts a Map<dynamic, dynamic>', () {
+      final yamlish = <dynamic, dynamic>{'name': 'oka', 'level': 3};
+      expect(jsonDecodeMap(yamlish), {'name': 'oka', 'level': 3});
+    });
+
+    test('jsonDecodeMap stringifies non-String keys', () {
+      final intKeyed = <int, String>{1: 'a'};
+      expect(jsonDecodeMap(intKeyed), {'1': 'a'});
+    });
+
+    test('jsonDecodeNullableMap accepts a Map<dynamic, dynamic>', () {
+      final yamlish = <dynamic, dynamic>{'name': 'oka'};
+      expect(jsonDecodeNullableMap(yamlish), {'name': 'oka'});
+      expect(jsonDecodeNullableMap(<dynamic, dynamic>{}), null);
+    });
+
+    test('jsonDecodeMapAs casts entries of a Map<dynamic, dynamic>', () {
+      final yamlish = <dynamic, dynamic>{'a': 1, 'b': 2};
+      expect(jsonDecodeMapAs<String, int>(yamlish), {'a': 1, 'b': 2});
+    });
+
+    test('jsonDecodeNullableMapAs accepts a Map<dynamic, dynamic>', () {
+      final yamlish = <dynamic, dynamic>{'a': 1};
+      expect(jsonDecodeNullableMapAs<String, int>(yamlish), {'a': 1});
+    });
+
+    test('jsonDecodeThrowableMap accepts a Map<dynamic, dynamic>', () {
+      final yamlish = <dynamic, dynamic>{'name': 'oka'};
+      expect(jsonDecodeThrowableMap(yamlish), {'name': 'oka'});
+    });
+  });
 }
