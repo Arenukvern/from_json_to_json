@@ -1,0 +1,53 @@
+# Publish to pub.dev through automated publishing (OIDC).
+#
+# Trigger: a v*.*.* tag push (cut after a release) or a manual dispatch with
+# the tag as the ref. The pub.dev package admin must list this repository and
+# workflow once; after that the OIDC token authorizes the upload — no
+# credentials in the repo.
+#
+# Manual recovery: gh workflow run pub_publish.yml --ref vX.Y.Z
+
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: pub-dev-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish to pub.dev
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Assert tag matches pubspec version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          tag_version="${RELEASE_TAG#v}"
+          pubspec_version="$(awk '/^version:/ {print $2; exit}' pubspec.yaml)"
+          if [[ "$tag_version" != "$pubspec_version" ]]; then
+            echo "::error::tag ($tag_version) != pubspec version ($pubspec_version)"
+            exit 1
+          fi
+
+      - run: dart pub get
+
+      - run: dart test
+
+      - run: dart pub publish --force
