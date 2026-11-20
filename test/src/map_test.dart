@@ -156,4 +156,24 @@ void main() {
       });
     });
   });
+
+  group('jsonDecodeNullableMapAs', () {
+    test('casts non-empty maps to the target types', () {
+      expect(jsonDecodeNullableMapAs<String, int>('{"a": 1}'), <String, int>{
+        'a': 1,
+      });
+    });
+
+    test('returns null for absent and empty maps', () {
+      expect(jsonDecodeNullableMapAs<String, int>(null), null);
+      expect(jsonDecodeNullableMapAs<String, int>({}), null);
+    });
+
+    test('throws on entry type mismatch', () {
+      expect(
+        () => jsonDecodeNullableMapAs<String, int>('{"a": "b"}'),
+        throwsA(isA<TypeError>()),
+      );
+    });
+  });
 }

@@ -82,4 +82,21 @@ void main() {
       });
     });
   });
+
+  group('jsonDecodeNullableThrowableBool', () {
+    test('converts strings and bools, null for absent', () {
+      expect(jsonDecodeNullableThrowableBool('true'), true);
+      expect(jsonDecodeNullableThrowableBool('no'), false);
+      expect(jsonDecodeNullableThrowableBool(false), false);
+      expect(jsonDecodeNullableThrowableBool(null), null);
+    });
+
+    test('throws ArgumentError for uninterpretable shapes', () {
+      expect(() => jsonDecodeNullableThrowableBool([]), throwsArgumentError);
+      expect(
+        () => jsonDecodeNullableThrowableBool({'a': 1}),
+        throwsArgumentError,
+      );
+    });
+  });
 }

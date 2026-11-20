@@ -45,4 +45,17 @@ void main() {
       });
     });
   });
+
+  group('jsonDecodeNullableNotEmptyString', () {
+    test('returns non-empty strings unchanged', () {
+      expect(jsonDecodeNullableNotEmptyString('hello'), 'hello');
+    });
+
+    test('returns null for empty, null and non-strings', () {
+      expect(jsonDecodeNullableNotEmptyString(''), null);
+      expect(jsonDecodeNullableNotEmptyString(null), null);
+      expect(jsonDecodeNullableNotEmptyString(42), null);
+      expect(jsonDecodeNullableNotEmptyString([1]), null);
+    });
+  });
 }

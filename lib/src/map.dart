@@ -87,6 +87,22 @@ Map<String, dynamic> jsonDecodeThrowableMap(final dynamic json) {
   return jsonDecode(jsonString);
 }
 
+/// Decodes a JSON value into a nullable [Map<K, V>], casting the entries.
+///
+/// Returns null when the input is absent or decodes to an empty map;
+/// throws when the entry types do not match [K] and [V].
+///
+/// ```dart
+/// jsonDecodeNullableMapAs<String, int>('{"a": 1}'); // {a: 1}
+/// jsonDecodeNullableMapAs<String, int>({}); // null
+/// jsonDecodeNullableMapAs<String, int>(null); // null
+/// ```
+///
+/// @ai Use when a map field may be absent but must be correctly typed when
+/// present; pairs [jsonDecodeNullableMap] with [jsonDecodeMapAs].
+Map<K, V>? jsonDecodeNullableMapAs<K, V>(final dynamic json) =>
+    jsonDecodeNullableMap(json)?.cast<K, V>();
+
 /// Checks if a string is potentially decodable as a JSON object.
 ///
 /// ```dart

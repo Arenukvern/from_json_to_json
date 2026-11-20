@@ -56,6 +56,28 @@ bool? jsonDecodeNullableBool(final dynamic value) {
   };
 }
 
+/// Converts a dynamic value to a nullable [bool], throwing on shapes it
+/// cannot interpret.
+///
+/// Unlike [jsonDecodeNullableBool] this throws [ArgumentError] for values
+/// that are neither bool, String nor null — use when a field's presence
+/// with an unexpected shape is a contract violation.
+///
+/// ```dart
+/// jsonDecodeNullableThrowableBool('true'); // true
+/// jsonDecodeNullableThrowableBool(null); // null
+/// jsonDecodeNullableThrowableBool([]); // throws ArgumentError
+/// ```
+///
+/// @ai Use for strict wire validation; prefer [jsonDecodeNullableBool]
+/// elsewhere.
+bool? jsonDecodeNullableThrowableBool(final dynamic value) => switch (value) {
+  final String v => jsonDecodeNullableBool(v),
+  final bool v => v,
+  null => null,
+  _ => throw ArgumentError.value(value, null, 'Expected a boolean'),
+};
+
 /// Safe conversion of a [bool] to a JSON
 // ignore: avoid_positional_boolean_parameters
 dynamic jsonEncodeBool(final bool value) => value;

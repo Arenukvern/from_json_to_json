@@ -1,3 +1,11 @@
+## 0.6.0
+
+ADDED:
+
+- `jsonDecodeNullableNotEmptyString` — dynamic → String?, null unless a non-empty String (absorbs intentcall_schema's deprecated stopgap)
+- `jsonDecodeNullableThrowableBool` — dynamic → bool?, throws ArgumentError for uninterpretable non-null shapes (absorbs intentcall_schema's deprecated stopgap)
+- `jsonDecodeNullableMapAs<K,V>` — dynamic → Map<K,V>?, null when absent/empty, throws on entry-type mismatch (absorbs intentcall_schema's deprecated stopgap)
+
 ## 0.5.2
 
 CHANGED:

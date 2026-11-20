@@ -43,6 +43,7 @@ final b = jsonDecodeBool('true'); // true
 | -------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | bool     | `jsonDecodeBool`                     | Convert dynamic to bool, false if invalid                                                                                                                               |
 | bool     | `jsonDecodeNullableBool`             | Convert dynamic to bool, null if invalid                                                                                                                                |
+| bool     | `jsonDecodeNullableThrowableBool`    | dynamic → bool?, throws ArgumentError for uninterpretable non-null shapes                                                                                               |
 | bool     | `jsonEncodeBool`                     | Identity for bool encoding                                                                                                                                              |
 | DateTime | `dateTimeFromIso8601String`          | String? → DateTime?                                                                                                                                                     |
 | DateTime | `dateTimeFromMillisecondsSinceEpoch` | int? → DateTime?                                                                                                                                                        |
@@ -70,10 +71,12 @@ final b = jsonDecodeBool('true'); // true
 | Map      | `jsonDecodeMap`                      | Decode JSON to map, always returns a map                                                                                                                                |
 | Map      | `jsonDecodeMapAs<K,V>`               | Decode JSON to typed Map<K,V>, may throw on type mismatch                                                                                                               |
 | Map      | `jsonDecodeNullableMap`              | Decode JSON to map, returns null if empty/invalid                                                                                                                       |
+| Map      | `jsonDecodeNullableMapAs<K,V>`       | Decode JSON to typed Map<K,V>?, null when absent/empty, throws on entry mismatch                                                                                        |
 | Map      | `jsonDecodeThrowableMap`             | Decode JSON to map, throws on error                                                                                                                                     |
 | Map      | `verifyMapDecodability`              | Check if input is a JSON object                                                                                                                                         |
 | String   | `jsonDecodeString`                   | Convert dynamic to string, empty if null                                                                                                                                |
 | String   | `jsonDecodeNullableString`           | Convert dynamic to string, null unless already a String                                                                                                                 |
+| String   | `jsonDecodeNullableNotEmptyString`   | Convert dynamic to string, null unless a non-empty String                                                                                                               |
 | String   | `jsonEncodeString`                   | Identity for string encoding                                                                                                                                            |
 
 ## Examples
