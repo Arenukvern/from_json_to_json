@@ -32,9 +32,9 @@ jobs:
           # `publish.yml` does not exist here).
           publish-workflow: dart_changesets_publish.yml
           # PAT tag pushes fire the publish workflow (pub.dev authorizes
-          # push events only). Unset -> preflight-only dispatches. Add a
-          # RELEASE_PLEASE_TOKEN-style secret (Contents: write) to enable
-          # real publishes.
-          # token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          # push events only). Set the RELEASE_PLEASE_TOKEN secret
+          # (Contents: write) to enable real publishes; unset -> still
+          # safe (preflight-only dispatches).
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
