@@ -1,0 +1,40 @@
+# dart_changesets release train: assembles the version PR from pending
+# intent files on main pushes; on the version-PR merge, pushes one
+# <package>-v<version> tag (start of the pub.dev-authorized publish flow).
+name: dart_changesets release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  # workflow_dispatch creation needs actions: write.
+  actions: write
+
+concurrency:
+  group: dart-changesets-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: Arenukvern/dart_changesets@v1
+        with:
+          # This repo's per-tag publish workflow (the action's default
+          # `publish.yml` does not exist here).
+          publish-workflow: dart_changesets_publish.yml
+          # PAT tag pushes fire the publish workflow (pub.dev authorizes
+          # push events only). Unset -> preflight-only dispatches. Add a
+          # RELEASE_PLEASE_TOKEN-style secret (Contents: write) to enable
+          # real publishes.
+          # token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

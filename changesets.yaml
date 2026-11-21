@@ -1,0 +1,3 @@
+# Single-package repository: the package IS the repo root.
+root_package: true
+tag_format: '{package}-v{version}'
