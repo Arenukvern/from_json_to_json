@@ -6,6 +6,8 @@ Add detailed documentation comments to the following classes, focusing on their 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Coverage Status](https://coveralls.io/repos/github/Arenukvern/from_json_to_json/badge.svg?branch=main)](https://coveralls.io/github/Arenukvern/from_json_to_json?branch=main)
 [![Pub Version](https://img.shields.io/badge/version-0.2.0-blue)](https://pub.dev/packages/from_json_to_json)
+[![release train](https://img.shields.io/github/actions/workflow/status/Arenukvern/from_json_to_json/dart_changesets.yml?branch=main&label=release%20train&logo=github)](https://github.com/Arenukvern/from_json_to_json/actions/workflows/dart_changesets.yml)
+[![release engine: dart_changesets](https://img.shields.io/badge/release_engine-dart__changesets-0175C2?logo=dart&logoColor=white)](https://github.com/Arenukvern/dart_changesets)
 
 A robust Dart package for safe, predictable, and ergonomic conversion between JSON and Dart core types. Handles edge cases, nulls, and type mismatches gracefully—making your serialization and deserialization code cleaner and more reliable.
 
